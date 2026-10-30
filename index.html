@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Redeneren</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="icon.svg">
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+  <div id="screen-home" class="screen active">
+    <header class="home-header">
+      <h1>Redeneren</h1>
+      <select id="track-select" class="groep-select"></select>
+      <button id="btn-settings" class="btn-settings" aria-label="Instellingen">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+        </svg>
+      </button>
+    </header>
+    <button class="btn btn-primary btn-vandaag" id="btn-vandaag">Vandaag</button>
+    <div class="matrix-container">
+      <div class="matrix-grid" id="matrix-grid"></div>
+    </div>
+    <div id="cell-modal" class="modal hidden">
+      <div class="modal-content">
+        <h2 id="modal-title"></h2>
+        <button id="btn-practice" class="btn btn-primary">Oefenen</button>
+        <button id="btn-exam" class="btn btn-secondary">Toets</button>
+        <button id="btn-cancel" class="btn btn-ghost">Annuleren</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="screen-session" class="screen">
+  </div>
+
+  <div id="screen-results" class="screen">
+  </div>
+
+  <div id="screen-settings" class="screen">
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
