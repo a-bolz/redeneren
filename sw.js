@@ -12,7 +12,9 @@ self.addEventListener('install', e => {
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
+      // CacheStorage is origin-wide and flitsen/rekenen live on the same
+      // origin — only ever delete our own app's old caches.
+      Promise.all(keys.filter(k => k.startsWith('redeneren-') && k !== CACHE).map(k => caches.delete(k)))
     ).then(() => self.clients.claim())
   );
 });

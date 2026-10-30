@@ -95,7 +95,7 @@ function renderV(key) {
       const a = n1, b = n2;
       const text = tpl === 0
         ? `${name} heeft ${amt(a)}. ${Hij} krijgt er ${b} bij. Hoeveel ${mv} heeft ${name} nu?`
-        : `Er ${a === 1 ? 'zit' : 'zitten'} ${amt(a)} in de pot. ${name} doet er ${b} bij. Hoeveel ${mv} zitten er nu in de pot?`;
+        : `Er ${a === 1 ? 'zit' : 'zitten'} ${amt(a)} in de mand. ${name} doet er ${b} bij. Hoeveel ${mv} zitten er nu in de mand?`;
       return { text, answer: a + b, input: 'keypad', explain: `${a} + ${b} = ${a + b}` };
     }
     case 'eraf': {
@@ -108,7 +108,7 @@ function renderV(key) {
     case 'samen': {
       const a = n1, b = n2;
       const text = tpl === 0
-        ? `${name} heeft ${adjAmt(a, ROOD)} en ${adjAmt(b, BLAUW)}. Hoeveel ${mv} heeft ${name} samen?`
+        ? `${name} heeft ${adjAmt(a, ROOD)} en ${adjAmt(b, BLAUW)}. Hoeveel ${mv} zijn dat samen?`
         : `In de doos zitten ${adjAmt(a, GROOT)} en ${adjAmt(b, KLEIN)}. Hoeveel ${mv} zitten er samen in de doos?`;
       return { text, answer: a + b, input: 'keypad', explain: `${a} + ${b} = ${a + b}` };
     }
@@ -126,8 +126,8 @@ function renderV(key) {
     case 'beginonbekend': {
       const b = n1, c = n2; // key is v:beginonbekend:<tpl>:<b>:<c>
       const text = tpl === 0
-        ? `${name} had een paar ${mv}. ${Hij} kreeg er ${b} bij. Nu heeft ${name} er ${c}. Hoeveel ${mv} had ${name} eerst?`
-        : `${name} had ${amt(b)}. ${Hij} kreeg er een paar bij. Nu heeft ${name} er ${c}. Hoeveel ${mv} kreeg ${name} erbij?`;
+        ? `${name} had een aantal ${mv}. ${Hij} kreeg er ${b} bij. Nu heeft ${name} er ${c}. Hoeveel ${mv} had ${name} eerst?`
+        : `${name} had ${amt(b)}. ${Hij} kreeg er een aantal bij. Nu heeft ${name} er ${c}. Hoeveel ${mv} kreeg ${name} erbij?`;
       return { text, answer: c - b, input: 'keypad', explain: `${c} ${MIN} ${b} = ${c - b}` };
     }
     case 'tweestappen': {
@@ -136,7 +136,10 @@ function renderV(key) {
         ? `${name} heeft ${amt(a)}. ${Hij} krijgt er ${b} bij en geeft er ${c} weg. Hoeveel ${mv} heeft ${name} nu?`
         : `${name} heeft ${amt(a)}. ${Hij} geeft er ${c} weg en krijgt er ${b} bij. Hoeveel ${mv} heeft ${name} nu?`;
       const answer = a + b - c;
-      return { text, answer, input: 'keypad', explain: `${a} + ${b} ${MIN} ${c} = ${answer}` };
+      const explain = tpl === 1
+        ? `${a} ${MIN} ${c} + ${b} = ${answer}`
+        : `${a} + ${b} ${MIN} ${c} = ${answer}`;
+      return { text, answer, input: 'keypad', explain };
     }
     case 'welkesom': {
       // tpl slot holds the story schema: 0=erbij, 1=eraf, 2=samen.
@@ -268,7 +271,7 @@ function renderP(key) {
   const toks = rule === 'abc' ? TOKENS3[set] : TOKENS[set];
   const seq = Array.from({ length: len }, (_, i) => toks[r[i % r.length]]);
   const answer = toks[r[len % r.length]];
-  const choices = rotate(toks.slice(), len % toks.length);
+  const choices = rotate(toks.slice(), (len + set) % toks.length);
   return {
     text: seq.join(' ') + '  …?',
     answer, input: 'choice', choices,
@@ -377,7 +380,7 @@ const KANDAT = [ // 14: {text, ja}
   { text: 'Jan is even oud als Piet. Piet is even oud als Jan. Kan dat allebei?', ja: true },
   { text: 'Noor heeft meer stickers dan Sara. Sara heeft meer stickers dan Noor. Kan dat allebei?', ja: false },
   { text: 'Finn is kleiner dan Tom. Tom is groter dan Finn. Kan dat allebei waar zijn?', ja: true },
-  { text: 'Lisa is de oudste van de klas. Mo is ouder dan Lisa. Kan dat allebei?', ja: false },
+  { text: 'Mo zit bij Lisa in de klas. Lisa is de oudste van de klas. Mo is ouder dan Lisa. Kan dat allebei?', ja: false },
   { text: 'De bal is rood. De bal is helemaal blauw. Kan dat allebei?', ja: false },
   { text: 'Piet heeft 3 knikkers. Piet heeft minder dan 5 knikkers. Kan dat allebei?', ja: true },
   { text: 'Sara zit voor Noor. Noor zit achter Sara. Kan dat allebei waar zijn?', ja: true },
@@ -394,11 +397,11 @@ const ALSDAN = [ // 14: {text, choices:[3], answer: index}
   { text: 'Als Sara haar kamer opruimt, krijgt ze een sticker. Sara ruimt haar kamer op. Wat krijgt Sara?', choices: ['Een sticker', 'Een fiets', 'Niets'], answer: 0 },
   { text: 'Als het donker wordt, gaan de lantaarns aan. Het wordt donker. Wat gebeurt er?', choices: ['De lantaarns gaan uit', 'De lantaarns gaan aan', 'Er gebeurt niets'], answer: 1 },
   { text: 'Als Tom honger heeft, eet hij een boterham. Tom heeft honger. Wat doet Tom?', choices: ['Hij gaat slapen', 'Hij drinkt alleen water', 'Hij eet een boterham'], answer: 2 },
-  { text: 'Als het regent, pakt Noor haar paraplu. Het regent NIET. Pakt Noor zeker haar paraplu?', choices: ['Ja, zeker', 'Dat weten we niet', 'Nee, dat kan niet'], answer: 1 },
+  { text: 'Als het regent, pakt Noor haar paraplu. Het regent NIET. Pakt Noor haar paraplu?', choices: ['Ja, zeker', 'Dat weten we niet', 'Nee, dat kan niet'], answer: 1 },
   { text: 'Als Lisa zwemles heeft, neemt ze haar badpak mee. Lisa heeft vandaag zwemles. Wat neemt ze mee?', choices: ['Haar badpak', 'Haar schaatsen', 'Haar gitaar'], answer: 0 },
   { text: 'Als Finn zijn tanden poetst, mag hij een verhaaltje. Finn poetst zijn tanden. Wat mag Finn?', choices: ['Niets', 'Een verhaaltje', 'Snoep'], answer: 1 },
   { text: 'Als de zon schijnt, smelt de sneeuwpop. De zon schijnt. Wat gebeurt er met de sneeuwpop?', choices: ['Hij smelt', 'Hij wordt groter', 'Er gebeurt niets'], answer: 0 },
-  { text: 'Als Mo zijn huiswerk af heeft, mag hij buiten spelen. Mo speelt buiten. Weet je zeker dat zijn huiswerk af is?', choices: ['Ja, zeker', 'Dat weten we niet', 'Nee, zeker niet'], answer: 1 },
+  { text: 'Als Mo zijn huiswerk af heeft, mag hij buiten spelen. Mo speelt buiten. Is zijn huiswerk af?', choices: ['Ja, zeker', 'Dat weten we niet', 'Nee, zeker niet'], answer: 1 },
   { text: 'Als het herfst is, vallen de blaadjes. Het is herfst. Wat doen de blaadjes?', choices: ['Ze vallen', 'Ze worden groen', 'Ze groeien'], answer: 0 },
   { text: 'Als Piet te laat is, mist hij de bus. Piet is te laat. Wat gebeurt er?', choices: ['Hij haalt de bus', 'Hij mist de bus', 'De bus wacht'], answer: 1 },
 ];

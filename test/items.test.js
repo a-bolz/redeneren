@@ -357,3 +357,32 @@ test('no plural noun after the number 1, with verb agreement', () => {
     }
   }
 });
+
+test('correct answer position varies within every choice-input patronen level', () => {
+  const track = TRACKS.find(t => t.id === 'patronen');
+  for (const level of track.levels) {
+    const positions = new Set();
+    let choiceItems = 0;
+    for (const key of level.keys) {
+      const it = renderItem(key);
+      if (it.input !== 'choice') continue;
+      choiceItems++;
+      positions.add(it.choices.indexOf(it.answer));
+    }
+    if (choiceItems >= 4) {
+      assert.ok(positions.size > 1,
+        `${level.name}: correct answer always at position ${[...positions][0]}`);
+    }
+  }
+});
+
+test('tweestappen explain narrates steps in story order', () => {
+  const track = TRACKS.find(t => t.id === 'verhaaltjes');
+  const level = track.levels.find(l => l.name === 'Twee stappen');
+  for (const key of level.keys) {
+    const [, , tpl, a, , c] = key.split(':');
+    const { explain } = renderItem(key);
+    if (tpl === '1') assert.ok(explain.startsWith(`${a} − ${c}`), `${key}: ${explain}`);
+    else assert.ok(explain.startsWith(`${a} +`), `${key}: ${explain}`);
+  }
+});

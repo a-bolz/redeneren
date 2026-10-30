@@ -184,6 +184,7 @@ function showItem() {
   const choicesEl = document.getElementById('choices');
   const keypadMount = document.getElementById('keypad-mount');
   choicesEl.innerHTML = '';
+  choicesEl.style.display = item.input === 'keypad' ? 'none' : '';
 
   if (item.input === 'keypad') {
     keypadMount.style.display = '';

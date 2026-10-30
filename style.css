@@ -635,3 +635,8 @@ html, body {
 /* Ladder: one wide, slim cell per level (rekenen's aspect-ratio assumed 4 per row) */
 .matrix-cell { aspect-ratio: auto; height: 52px; }
 .level-label { width: 120px; font-size: 13px; }
+/* Review fixes: session scroll + abort clearance, token sizing, label wrap */
+.item-text { flex: 1 1 0; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 60px 24px 24px; }
+.item-text.tokens { font-size: 32px; letter-spacing: 4px; padding: 60px 24px 16px; }
+.choice-btn.token { font-size: 30px; padding: 12px 18px; }
+.level-label { white-space: normal; line-height: 1.2; }
