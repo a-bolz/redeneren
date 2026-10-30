@@ -632,3 +632,6 @@ html, body {
 .explain-line { text-align: center; font-size: 26px; min-height: 40px; padding: 8px; }
 .explain-line.correct { color: var(--color-success); }
 .explain-line.wrong { color: var(--color-error); }
+/* Ladder: one wide, slim cell per level (rekenen's aspect-ratio assumed 4 per row) */
+.matrix-cell { aspect-ratio: auto; height: 52px; }
+.level-label { width: 120px; font-size: 13px; }
